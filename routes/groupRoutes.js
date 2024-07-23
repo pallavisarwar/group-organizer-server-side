@@ -13,4 +13,13 @@ router.get("/", (req, res, next) => {
   }
 });
 
+router.get("/:id", (req, res, next) => {
+  try {
+    res.json(groups.getById(req.params.id));
+  } catch (e) {
+    console.error("Error while getting group", e.message);
+    next(e);
+  }
+});
+
 module.exports = router;

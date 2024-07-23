@@ -15,4 +15,16 @@ getById = (id = 0) => {
   return { data };
 };
 
-module.exports = { getAll, getById };
+create = (groupToAdd = null) => {
+  const result = db.query(
+    `INSERT INTO Groups
+    (Title, Description, ImageURL)
+    VALUES
+    (${groupToAdd.title}, ${groupToAdd.description}, ${groupToAdd.imageUrl})`
+  );
+};
+
+module.exports = {
+  getAll,
+  getById,
+};

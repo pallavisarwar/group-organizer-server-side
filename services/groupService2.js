@@ -1,8 +1,8 @@
-const db = require("./dbServices");
+const db = require("./dbServices2");
 
 getAll = () => {
-  const data = get("SELECT * FROM Groups");
-  console.log("blah", data);
+  const data = db.query("SELECT * FROM Groups");
+
   return { data };
 };
 
@@ -11,6 +11,7 @@ getById = (id = 0) => {
     return [];
   }
   const data = db.query(`SELECT * FROM Groups WHERE GroupId =${id}`);
+
   return { data };
 };
 

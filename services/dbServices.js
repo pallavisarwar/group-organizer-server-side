@@ -1,15 +1,15 @@
-const sqlite = require("better-sqlite3");
+const sqlite3 = require("sqlite3").verbose();
 
-const path = require("path");
-// const { param } = require("../routes/groupRoutes");
-// const { query } = require("express");
+const db = new sqlite3.Database(
+  "./database/groupOrganizerDB.sqlite3",
+  (err) => {
+    if (err) {
+      console.error(err.message);
+      throw err;
+    } else {
+      console.log("database connected");
+    }
+  }
+);
 
-const db = new sqlite(path.resolve("database", "groupOrganizerDB.sqlite3"), {
-  fileMustExist: true,
-});
-
-query = (sql, params = []) => {
-  return db.prepare(sql).all(params);
-};
-
-module.exports = { query };
+module.exports = db;

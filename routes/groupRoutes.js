@@ -1,9 +1,7 @@
 const express = require("express");
-
 const router = express.Router();
 
 const bodyParser = require("body-parser");
-
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 
@@ -16,7 +14,7 @@ router.get("/", (req, res, next) => {
         res.status(400).json({ error: err.message });
         return;
       }
-      res.json({
+      res.status(200).json({
         message: "success",
         data: rows,
       });
@@ -36,7 +34,13 @@ router.get("/:id", (req, res, next) => {
           res.status(400).json({ error: err.message });
           return;
         }
-        res.json({
+        if (!row) {
+          res.status(404).json({
+            message: "Group not found",
+          });
+          return;
+        }
+        res.status(200).json({
           message: "success",
           data: row,
         });
@@ -70,8 +74,8 @@ router.post("/", (req, res, next) => {
         return;
       }
       data.GroupId = this.lastID;
-      res.json({
-        message: "success",
+      res.status(201).json({
+        message: "Group created",
         data,
       });
     });
@@ -103,13 +107,41 @@ router.put("/:id", (req, res, next) => {
         res.status(400).json({ error: err.message });
         return;
       }
-      res.json({
-        message: "success",
+      res.status(200).json({
+        message: "Group updated",
         data,
         changes: this.changes,
       });
     });
-  } catch (e) {}
+  } catch (e) {
+    console.error("Error while updating group", e.message);
+    next(e);
+  }
+});
+
+router.delete("/:id", (req, res, next) => {
+  if (!req.params.id || req.params.id <= 0) {
+    res.status(404).json({ error: "Group not found" });
+    return;
+  }
+  try {
+    db.run(
+      `DELETE FROM Groups WHERE GroupId = ${req.params.id}`,
+      function (err, result) {
+        if (err) {
+          res.status(400).json({ error: res.message });
+          return;
+        }
+        res.status(200).json({
+          message: "Group deleted",
+          changes: this.changes,
+        });
+      }
+    );
+  } catch (e) {
+    console.error("Error while deleting group", e.message);
+    next(e);
+  }
 });
 
 module.exports = router;

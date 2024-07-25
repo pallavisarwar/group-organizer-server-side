@@ -4,6 +4,7 @@ const app = express();
 const port = 3000 || process.env.port;
 
 const groupsRouter = require("./routes/groupRoutes");
+const membersRouter = require("./routes/memberRoutes");
 
 app.use(express.json());
 
@@ -18,6 +19,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/groups", groupsRouter);
+app.use("/members", membersRouter);
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;

@@ -52,6 +52,33 @@ router.get("/:id", (req, res, next) => {
   }
 });
 
+router.get("/:id/members", (req, res, next) => {
+  try {
+    db.get(
+      `SELECT * FROM Members WHERE GroupId = ${req.params.id}`,
+      (err, row) => {
+        if (err) {
+          res.status(400).json({ error: err.message });
+          return;
+        }
+        if (!row) {
+          res.status(404).json({
+            message: "Members not found for provided group",
+          });
+          return;
+        }
+        res.status(200).json({
+          message: "success",
+          data: row,
+        });
+      }
+    );
+  } catch (e) {
+    console.error("Error while getting group members", e.message);
+    next(e);
+  }
+});
+
 router.post("/", (req, res, next) => {
   if (!req.body.title || req.body.title === "") {
     res.status(400).json({ error: "New group title must be provided" });
@@ -90,6 +117,12 @@ router.put("/:id", (req, res, next) => {
     res.status(404).json({ error: "Group not found" });
     return;
   }
+
+  if (!req.body.title || req.body.title === "") {
+    res.status(400).json({ error: "New group title cannot be blank" });
+    return;
+  }
+
   const data = {
     GroupId: req.params.id,
     Title: req.body.title,

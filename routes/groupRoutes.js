@@ -54,14 +54,14 @@ router.get("/:id", (req, res, next) => {
 
 router.get("/:id/members", (req, res, next) => {
   try {
-    db.get(
+    db.all(
       `SELECT * FROM Members WHERE GroupId = ${req.params.id}`,
-      (err, row) => {
+      (err, rows) => {
         if (err) {
           res.status(400).json({ error: err.message });
           return;
         }
-        if (!row) {
+        if (!rows) {
           res.status(404).json({
             message: "Members not found for provided group",
           });
@@ -69,7 +69,7 @@ router.get("/:id/members", (req, res, next) => {
         }
         res.status(200).json({
           message: "success",
-          data: row,
+          data: rows,
         });
       }
     );

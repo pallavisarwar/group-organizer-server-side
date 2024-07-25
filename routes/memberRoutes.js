@@ -73,7 +73,7 @@ router.post("/", (req, res, next) => {
         res.status(400).json({ error: err.message });
         return;
       }
-      data.GroupId = this.lastID;
+      data.MemberId = this.lastID;
       res.status(201).json({
         message: "Member created",
         data,

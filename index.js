@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 
 const port = 3000 || process.env.port;
+const cors = require("cors");
 
 const groupsRouter = require("./routes/groupRoutes");
 const membersRouter = require("./routes/memberRoutes");
@@ -30,6 +31,8 @@ app.use((err, req, res, next) => {
   res.status(statusCode).json({ message: err.message });
   return;
 });
+
+app.use(cors());
 
 app.listen(port, () => {
   console.log(`Group Organizer API Listening at http://localhost:${port}`);

@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const cors = require("cors");
 
 const bodyParser = require("body-parser");
 router.use(bodyParser.urlencoded({ extended: false }));
@@ -176,5 +177,7 @@ router.delete("/:id", (req, res, next) => {
     next(e);
   }
 });
+
+router.use(cors());
 
 module.exports = router;
